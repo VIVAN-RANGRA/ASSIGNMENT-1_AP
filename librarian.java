@@ -4,18 +4,7 @@ import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 public class librarian {
-    public  boolean search_books(int x){
-        if(Book_list.isEmpty()){
-            System.out.println("No books in the library!");
-            return false;
-        }
-        for (org.example.book book : Book_list) {
-            if (book.getId == x) {
-                return true;
-            }
-        }
-        return false;
-    }
+
     public void register_member() {
         Scanner sc = new Scanner(System.in);
         try {
@@ -55,36 +44,36 @@ public class librarian {
     public void add_book(book b) {
 
         Scanner sc = new Scanner(System.in);
-        System.out.print("Enter the id of the book: ");
-        int id = sc.nextInt();
+
         System.out.print("Enter the title of the book: ");
         String title = sc.next();
         System.out.print("Enter the author of the book: ");
         String author = sc.next();
         System.out.print("Enter the number of copies of the book: ");
         int copies = sc.nextInt();
-         b = new book(id, title, author, copies);
-        if(search_books(id)){
-            System.out.println("Book already exists, so more copies will be added to the existing book!");
-            for (org.example.book book : Book_list) {
-                if (book.getId == id) {
-                    book.copies += copies;
-                }
-            }
-        }
-        else{
+         for(int i=0 ; i<Book_list.size(); i++) {
+             if (Book_list.get(i).getTitle().equals(title)) {
+                 System.out.println("Book already exists!");
+                 return;
+             }
+         }
+         for(int i=0;i<copies;i++){
+             b = new book(i+1,title,author);
+             Book_list.add(b);
+             b.copies=1;
+         }
         System.out.println("Book Added Successfully!");
-        Book_list.add(b);}
+
     }
 
-    public void remove(int id , String title){
+    public void remove(String title){
         if( Book_list.isEmpty()){
             System.out.println("No books in the library!");
             return;
         }
         for (org.example.book book : Book_list) {
             if (book.getTitle().equals(title)) {
-                book.copies--;
+                Book_list.remove(book);
                 System.out.println("Book Removed Successfully!");
                 return;
             }
