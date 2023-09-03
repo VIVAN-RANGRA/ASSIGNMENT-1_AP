@@ -57,18 +57,21 @@ public class member      {
         this.phone_number = phone_number;
     }
 
-    public void borrow_book(int x ){
+    public void borrow_book(int x , String title){
 
 
-            if (librarian.Book_list.get(x).copies > 0) {
+            if (librarian.Book_list.get(x).copies > 0 && member_book.size() < 2 && fine==0 && librarian.Book_list.get(x).getTitle().equals(title)) {
                 member_book.add(librarian.Book_list.get(x));
-
+                librarian.Book_list.get(x).copies -= 1;
                 librarian.Book_list.get(x).startTimer();
                 System.out.println("Book borrowed successfully!");
 
             } else {
-                System.out.println("Sorry! No copies of the book are available!");
+                if(librarian.Book_list.get(x).copies==0) System.out.println("No copies available!");
+                else if(member_book.size()>=2) System.out.println("You have already borrowed 2 books!");
+                else System.out.println("You have a fine of Rs."+fine+" on the book "+librarian.Book_list.get(x).getTitle());
             }
+
 
     }
     public member(){}
@@ -77,7 +80,7 @@ public class member      {
         this.name = name;
         this.phone_number = phone_number;
     }
-    public int  return_book(int id , String title){
+    public void  return_book(int id , String title){
         for(int i=0;i<member_book.size();i++){
            if(member_book.get(i).getId()==id && member_book.get(i).getTitle().equals(title)){
                 librarian.Book_list.get(id-1).stopTimer();
@@ -88,14 +91,10 @@ public class member      {
                     System.out.println("Please  pay the fine to return the book!");
                 }  else System.out.println("No fine on the book "+title);
                 member_book.remove(i);
-                librarian.Book_list.get(id-1).copies++;
+                librarian.Book_list.add(i+1,librarian.Book_list.get(id-1));
                 System.out.println("Book returned successfully!");
-
-
-                return 0;
                 }
           }
-        return fine;
     }
     public int total_fine(){
         for(int i=0;i<member_book.size();i++){
