@@ -56,11 +56,9 @@ public class Main {
                         l.add_book(b);
                     } else if (choice_2 == 4) {
                         try {
-                            System.out.print("Enter the id of the book to be removed: ");
-                            int id = sc.nextInt();
                             System.out.print("Enter the title of the book to be removed: ");
                             String title = sc.next();
-                            l.remove(id, title);
+                            l.remove(title);
                         } catch (InputMismatchException e) {
                             System.err.println("Input mismatch. Please enter a valid integer for ID.");
                         } catch (Exception e) {
@@ -85,13 +83,12 @@ public class Main {
                     member m = new member(name, phone_number);
                     System.out.println("Welcome Member " + name + "<" + phone_number + ">");
                     int fine = 0;
+                    fine = m.total_fine();
 
                     // Initialize borrowed books from saved data if available
                     ArrayList<book> memberSavedData = savedData.get(phone_number);
                     if (memberSavedData != null) {
                         m.initializeBorrowedBooks(memberSavedData);
-                    } else {
-                        System.out.println("No saved data available. Starting with an empty list of borrowed books.");
                     }
 
                     while (true) {
@@ -117,22 +114,22 @@ public class Main {
                             int id = sc.nextInt();
                             System.out.print("Enter the title of the book to be issued: ");
                             String title = sc.next();
-                            m.borrow_book(id - 1);
+                            m.borrow_book(id - 1,title);
                             librarian.Book_list.get(id - 1).copies -= 1;
                         } else if (choice_2 == 4) {
                             System.out.print("Enter the id of the book to be returned: ");
                             int id = sc.nextInt();
                             System.out.print("Enter the title of the book to be returned: ");
                             String title = sc.next();
-                            m.fine += m.return_book(id, title);
-                            System.out.print("Fine is paid for this book");
+                            m.return_book(id, title);
+
                         } else if (choice_2 == 5) {
-                            m.fine += m.total_fine();
+
                             if (m.fine == 0) {
                                 System.out.println("You have no fine to pay for rest of the books!");
                             } else if (m.fine > 0) {
                                 System.out.println("You have a fine of Rs." + m.fine + ". It has been paid successfully!\n");
-                                System.out.print("All the books have been reissued ! ");
+
                             }
                         } else if (choice_2 == 6) {
                             // Save the current state of borrowed books for this member
